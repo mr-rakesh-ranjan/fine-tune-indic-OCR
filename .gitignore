@@ -1,2 +1,4 @@
 .venv/  
 BN-HTR_Dataset/
+__pycache__/
+checkpoint-*/

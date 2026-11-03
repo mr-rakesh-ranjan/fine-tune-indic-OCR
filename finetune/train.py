@@ -35,7 +35,7 @@ class Collator:
             add_generation_prompt=generation_prompt,
             return_dict=True,
             return_tensors="pt",
-            padding=True,
+            processor_kwargs={"padding": True},
         )
 
     def __call__(self, batch):
@@ -71,8 +71,13 @@ def main():
 
     proc = load_processor(args.model)
     model = load_model(args.model, quant4=not args.no_quant)
+    model.config.text_config.use_cache = False  # incompatible with gradient checkpointing
     if not args.no_quant:
-        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+        model = prepare_model_for_kbit_training(
+            model,
+            use_gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
+        )
     else:
         model.gradient_checkpointing_enable()
         model.enable_input_require_grads()
@@ -95,7 +100,7 @@ def main():
         num_train_epochs=args.epochs,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.03,
+        warmup_steps=0.03,  # values below 1 are a ratio of total steps
         per_device_train_batch_size=args.batch,
         per_device_eval_batch_size=args.batch,
         gradient_accumulation_steps=args.accum,

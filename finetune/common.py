@@ -18,7 +18,9 @@ def normalize(text: str) -> str:
 
 
 def load_processor(model_id: str = MODEL_ID):
-    proc = AutoProcessor.from_pretrained(model_id, min_pixels=MIN_PIXELS, max_pixels=MAX_PIXELS)
+    proc = AutoProcessor.from_pretrained(
+        model_id, size={"shortest_edge": MIN_PIXELS, "longest_edge": MAX_PIXELS}
+    )
     proc.tokenizer.padding_side = "right"
     return proc
 

@@ -20,6 +20,10 @@ python evaluate.py --data data/test.jsonl --adapter outputs/bangla-hw-lora --pre
 
 # 4. use it
 python infer.py line1.png line2.png
+
+
+python infer.py track.png --adapter outputs/bangla-hw-lora
+
 ```
 
 ## BN-HTR notes

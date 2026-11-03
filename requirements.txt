@@ -1,6 +1,7 @@
-torch
-torchvision
-transformers>=4.57
+--extra-index-url https://download.pytorch.org/whl/cu132
+torch==2.15.0+cu132
+torchvision==0.29.2+cu132
+transformers>=5.22
 peft>=0.13
 bitsandbytes>=0.46.1
 accelerate>=1.0
